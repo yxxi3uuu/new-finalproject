@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>首頁</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdf6ec;
+      overflow-x: hidden;
+    }
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .character {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      animation: walkIn 3s ease-out forwards;
+    }
+    @keyframes walkIn {
+      0% { transform: translateX(-150%) translateY(0); }
+      100% { transform: translateX(-50%) translateY(0); }
+    }
+    .speech-bubble, .speech-bubble2 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff3cd;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: 2px solid #f1c40f;
+      font-size: 1.2rem;
+      animation: fadeIn 4s ease forwards;
+      opacity: 0;
+    }
+    .speech-bubble { top: 190px; }
+    .speech-bubble2 { top: 260px; }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .button-area {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      animation: slideUp 2s ease-out 3s forwards;
+      opacity: 0;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .btn {
+      background-color: #6e4c1e;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      background-color: #5a3f17;
+    }
+    .slide-in-image, .slide-in-image4 {
+      position: absolute;
+      right: -300px;
+      width: 200px;
+      animation: slideInFromRight 2s ease-out forwards;
+    }
+    .slide-in-image4 { top: 450px; }
+    .slide-in-image { top: 100px; }
+    .slide-in-image2, .slide-in-image3 {
+      position: absolute;
+      left: -300px;
+      width: 150px;
+      animation: slideInFromLeft 2s ease-out forwards;
+    }
+    .slide-in-image2 { top: 400px; }
+    .slide-in-image3 { top: 90px; }
+    @keyframes slideInFromRight {
+      0% { right: -300px; opacity: 0; }
+      100% { right: 50px; opacity: 1; }
+    }
+    @keyframes slideInFromLeft {
+      0% { left: -300px; opacity: 0; }
+      100% { left: 50px; opacity: 1; }
+    }
+    .pinecone {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-image: url('pinecone.png'); 
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar" class="navbar-container"></div>
+  <main>
+    <div class="container">
+      <img class="character" src="picture/cute.png" alt="角色">
+      <img class="slide-in-image" src="picture/sweater.png" alt="衣服">
+      <img class="slide-in-image2" src="picture/pants.png" alt="褲子">
+      <img class="slide-in-image3" src="picture/doll.png" alt="娃娃">
+      <img class="slide-in-image4" src="picture/snack.png" alt="零食">
+      <div class="speech-bubble">歡迎來到NCU二手商品復活網站！</div>
+      <div class="speech-bubble2">
+        Welcome~這裡讓校園買賣變得更簡單、更有趣！
+        你可以輕鬆找到想要的寶物，也能讓你的閒置物品找到新主人。
+        一起實踐環保生活，打造友善、永續的校園交易社群！
+      </div>
+      <div class="button-area">
+        <button class="btn" onclick="location.href='about.html'">關於我們</button>
+        <button class="btn" onclick="location.href='shop.html'">開始購物</button>
+      </div>
+    </div>
+  </main>
+  <script>
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('navbar').innerHTML = html;
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const scripts = tempDiv.querySelectorAll("script");
+        scripts.forEach(script => {
+          const newScript = document.createElement("script");
+          if (script.src) {
+            newScript.src = script.src;
+          } else {
+            newScript.textContent = script.textContent;
+          }
+          document.body.appendChild(newScript);
+        });
+
+        const homeLink = document.querySelector('a[href="home.html"]');
+        if (homeLink) {
+          homeLink.classList.add('active');
+        }
+      });
+
+    function createpinecone() {
+      const pinecone = document.createElement('div');
+      pinecone.classList.add('pinecone');
+      pinecone.style.left = Math.random() * window.innerWidth + 'px';
+      pinecone.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(pinecone);
+      setTimeout(() => { pinecone.remove(); }, 10000);
+    }
+    setInterval(createpinecone, 1000);
+  </script>
+</body>
+</html>

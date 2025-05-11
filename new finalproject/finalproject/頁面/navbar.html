@@ -1,0 +1,122 @@
+<style>
+      body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #f5d6a4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-container img {
+      height: 40px;
+      vertical-align: middle;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      padding: 6px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      font-size: 16px;
+    }
+
+    .nav-link:hover {
+      background-color: #e0b87d;
+    }
+
+    .active {
+      background-color: #5e4436;
+      color: white !important;
+      font-weight: bold;
+      padding: 6px 16px;
+      border-radius: 6px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-right .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-right: 20px;
+    }
+
+    .fa-shopping-cart {
+      font-size: 16px;
+    }
+</style>
+
+<header class="navbar">
+  <div class="left-section">
+    <div class="logo-container">
+      <img src="PICTURE/LOGO.png" alt="Logo" />
+    </div>
+    <nav class="nav-links">
+      <a href="home.html" class="nav-link">首頁</a>
+      <a href="about.html" class="nav-link">關於我們</a>
+      <a href="shop.html" class="nav-link">購物網站</a>
+    </nav>
+  </div>
+
+  <div class="nav-right">
+    <a href="#" class="nav-link" id="cart-link">🛒 購物車</a>
+    <a href="#" class="nav-link" id="profile-link">個人頁面</a>
+    <a href="#" class="nav-link" id="login-link">登入</a>
+  </div>
+</header>
+
+<script>
+  (function () {
+    const loginLink = document.getElementById("login-link");
+    const profileLink = document.getElementById("profile-link");
+    const cartLink = document.getElementById("cart-link");
+
+    const isLoggedIn = localStorage.getItem("loginUser");
+
+    if (isLoggedIn) {
+      loginLink.textContent = "登出";
+      loginLink.href = "#";
+      loginLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        localStorage.removeItem("loginUser");
+        alert("已登出");
+        window.location.href = "home.html";
+      });
+
+      profileLink.href = "personal.html";
+      cartLink.href = "cart.html";
+    } else {
+      loginLink.textContent = "登入";
+      loginLink.href = "login.html";
+
+      profileLink.href = "login.html";
+      cartLink.href = "login.html";
+    }
+  })();
+</script>

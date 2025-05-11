@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>註冊帳號</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: #fdf6ec;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #f5d6a4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-container img {
+      height: 40px;
+      vertical-align: middle;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      padding: 6px 10px;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      font-size: 16px;
+    }
+
+    .nav-link:hover {
+      background-color: #e0b87d;
+    }
+
+    .active {
+      background-color: #5e4436;
+      color: white !important;
+      font-weight: bold;
+      padding: 6px 16px;
+      border-radius: 6px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-right .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-right: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 350px;
+      position: relative;
+      z-index: 10;
+      margin-top: 60px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .role-selection {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .role-selection label {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      font-size: 14px;
+    }
+
+    .role-selection input {
+      margin-right: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ccb286;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .links {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #007BFF;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    .error {
+      font-size: 12px;
+      color: red;
+      display: none;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    .pinecone {
+      position: absolute;
+      top: -50px;
+      width: 30px;
+      height: 30px;
+      background-image: url('pinecone.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="left-section">
+      <div class="logo-container">
+        <img src="PICTURE/LOGO.png" alt="Logo" />
+      </div>
+      <nav class="nav-links">
+        <a href="home.html" class="nav-link">首頁</a>
+        <a href="about.html" class="nav-link">關於我們</a>
+        <a href="shop.html" class="nav-link">購物網站</a>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <a href="#" class="nav-link" id="cart-link">🛒 購物車</a>
+      <a href="#" class="nav-link" id="profile-link">個人頁面</a>
+      <a href="#" class="nav-link" id="login-link">登入</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>註冊帳號</h2>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="姓名 / 暱稱" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="tel" id="phone" placeholder="電話號碼" required pattern="^09\d{8}$">
+      <input type="password" id="password" placeholder="密碼" required>
+      <input type="password" id="confirmPassword" placeholder="確認密碼" required>
+      <div style="margin-bottom: 15px;">
+        <label for="captchaInput"></label>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+          <canvas id="captchaCanvas" width="100" height="40" style="border: 1px solid #ccc;"></canvas>
+          <button type="button" onclick="generateCaptcha()">重新產生</button>
+        </div>
+        <input type="text" id="captchaInput" placeholder="請輸入驗證碼" required>
+      </div>
+
+      <div class="role-selection">
+        <label><input type="radio" name="role" value="buyer" required> 買家</label>
+        <label><input type="radio" name="role" value="seller" required> 賣家</label>
+      </div>
+      <div class="error" id="errorMsg">請確認所有欄位都已正確填寫。</div>
+      <button type="submit" id="submitBtn" disabled>註冊</button>
+    </form>
+    <div class="links">
+      <a href="login.html">已有帳號？登入</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    function validateForm() {
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirm = confirmInput.value;
+      const phone = document.getElementById('phone').value.trim();
+      const roleSelected = document.querySelector('input[name="role"]:checked');
+      const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const validPhone = /^09\d{8}$/.test(phone);
+      const valid = name && validEmail && validPhone &&
+                    password.length >= 6 && password === confirm &&
+                    roleSelected;
+      submitBtn.disabled = !valid;
+      errorMsg.style.display = valid ? 'none' : 'block';
+    }
+
+    form.addEventListener('input', validateForm);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const captchaInput = document.getElementById('captchaInput').value.trim().toUpperCase();
+      if (captchaInput !== currentCaptcha) {
+        alert("驗證碼錯誤，請重新輸入");
+        generateCaptcha();
+        return;
+      }
+
+      alert("註冊成功！");
+      localStorage.setItem("loginUser", JSON.stringify({ name: nameInput.value }));
+      window.location.href = "personal.html";
+    });
+
+    function createpinecone() {
+      const pinecone = document.createElement('div');
+      pinecone.classList.add('pinecone');
+      const container = document.querySelector('.container');
+      const containerRect = container.getBoundingClientRect();
+      const pineconeWidth = 30;
+
+      let left;
+      do {
+        left = Math.random() * window.innerWidth;
+      } while (
+        left + pineconeWidth > containerRect.left &&
+        left < containerRect.right
+      );
+
+      pinecone.style.left = left + 'px';
+      pinecone.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(pinecone);
+
+      setTimeout(() => {
+        pinecone.remove();
+      }, 10000);
+    }
+
+    let currentCaptcha = "";
+
+    function generateCaptcha() {
+      const canvas = document.getElementById("captchaCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      currentCaptcha = "";
+      for (let i = 0; i < 5; i++) {
+        currentCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      ctx.font = "24px Arial";
+      ctx.fillStyle = "#333";
+      ctx.fillText(currentCaptcha, 10, 30);
+    }
+
+    generateCaptcha(); 
+
+
+    setInterval(createpinecone, 500);
+
+    (function () {
+      const loginLink = document.getElementById("login-link");
+      const profileLink = document.getElementById("profile-link");
+      const cartLink = document.getElementById("cart-link");
+
+      const isLoggedIn = localStorage.getItem("loginUser");
+
+      if (isLoggedIn) {
+        loginLink.textContent = "登出";
+        loginLink.href = "#";
+        loginLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          localStorage.removeItem("loginUser");
+          alert("已登出");
+          window.location.href = "home.html";
+        });
+
+        profileLink.href = "profile.html";
+        cartLink.href = "cart.html";
+      } else {
+        loginLink.textContent = "登入";
+        loginLink.href = "login.html";
+
+        profileLink.href = "login.html";
+        cartLink.href = "login.html";
+      }
+    })();
+  </script>
+</body>
+</html>
